@@ -1,5 +1,8 @@
 package village;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 /**
  * The Villagers live in the Village.
  * 
@@ -10,6 +13,9 @@ package village;
  * they will simply tell you that unfortunately they don't remember.
  */
 public class Villager {
+
+    // Loggers are like a souped up println...
+    private static final Logger logger = LogManager.getLogger(Villager.class);
 
 	/**
 	 * The next number to allocate to a villager.
@@ -33,6 +39,11 @@ public class Villager {
 		this.number = nextNumber;
 		nextNumber++;
 	}
+
+    public Villager() {
+        allocateNumber();
+        Village.INSTANCE.enter(this);
+    }
 
 
     /**
@@ -60,6 +71,7 @@ public class Villager {
      * If you ask a Villager if they think someone else is a Warden, they will say no - they don't know about Wardens
      */
      public boolean isWarden(Villager v) {
+         logger.debug("I've been asked if {} is a warden.", v.getName());
          return false;
      }
 
@@ -68,11 +80,27 @@ public class Villager {
       * beach to try to make it past the headland.
       */
      public boolean escape() {
+         logger.debug("I was asked to escape.");
+
          if (conditioned) {
+             logger.debug("But I've been conditioned not to.");
              throw new UnsupportedOperationException("No, I couldn't possibly think of doing that");
          } else {
+             logger.debug("I'm going to run madly along the beack and try to get past the headland.");
              Village.INSTANCE.declareEscape(this, "I'm getting out of here!");
+
+             // Hmm, we'll discover if this succeeds.
+             logger.debug("Hooray! I've escaped the Village!");
+             return true;
          }
+     }
+
+     /**
+      * When the hospital conditions a villager, they will remember not to try to escape.
+      */
+     public void condition() {
+         logger.info("I ... must ... not ... try ... to ... escape ...");
+         this.conditioned = true;
      }
 
 
