@@ -4,7 +4,7 @@ plugins {
 }
 
 repositories {
-    maven { url 'http://hopper.une.edu.au:8081/artifactory/libs-release/' }
+    maven { url 'https://hopper.une.edu.au/artifactory/libs-release/' }
     jcenter()
 }
 
